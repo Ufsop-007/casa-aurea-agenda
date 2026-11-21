@@ -49,7 +49,8 @@
       const ext = C.EXTRAS.filter(e => (extras || []).includes(e.id)).reduce((s, e) => s + e.preco, 0);
       return base + ext;
     }
-    const sinalPadrao = total => Math.round(total * C.PCT_SINAL);
+    const centavos = v => Math.round(v * 100) / 100;
+    const sinalPadrao = total => centavos(total * C.PCT_SINAL);
 
     const ocupa = (r, periodo) => r.periodo === 'dia' || periodo === 'dia' || r.periodo === periodo;
     const doDia = (regs, data, ignorarId) => ativos(regs).filter(r => r.data === data && r.id !== ignorarId);
@@ -172,7 +173,7 @@
 
     // ---------- planilha para o Excel (CSV com ponto e vírgula, padrão brasileiro) ----------
     function celula(v) {
-      if (typeof v === 'number') return String(v);
+      if (typeof v === 'number') return String(centavos(v)).replace('.', ','); // Excel em português usa vírgula
       let s = String(v ?? '');
       if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; // impede o Excel de rodar fórmulas vindas dos dados
       return /[;"\r\n]/.test(s) || s.startsWith("'") ? `"${s.replace(/"/g, '""')}"` : s;

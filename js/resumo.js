@@ -90,19 +90,23 @@
   function planilhaCartoes(regs) {
     const linhas = R.ordenar(R.ativos(regs));
     if (!linhas.length) return '<p class="muted lista-vazia">Nenhuma festa ainda. O que você marcar na Agenda aparece aqui.</p>';
+    // Centralizado: data em cima, a festa embaixo.
     return linhas.map(r => {
       const d = R.lerData(r.data);
-      const chip = `<span class="data-chip"><b>${d.getDate()}</b><span>${T.MESES[d.getMonth()].slice(0, 3)} · ${T.DIAS[d.getDay()].slice(0, 3)}</span></span>`;
+      const data = `<span class="lc-data"><b>${d.getDate()}</b> ${T.MESES[d.getMonth()]} · ${T.DIAS[d.getDay()].split('-')[0]}</span>
+        <span class="lc-turno">${T.esc(T.turno(r))}</span>`;
       if (r.kind === 'fechado') {
-        return `<button type="button" class="linha-cartao l-fech" data-ir="${r.data}">${chip}
-          <span class="info"><b>Fechado</b><span>${T.esc(T.turno(r))} · ${T.esc(r.motivo)}</span></span></button>`;
+        return `<button type="button" class="linha-cartao l-fech" data-ir="${r.data}">${data}
+          <b class="lc-nome">Fechado</b><span class="lc-festa">${T.esc(r.motivo)}</span></button>`;
       }
       const st = R.situacao(r);
       const pendencia = r.saldoPago ? 'l-ok' : r.sinalPago ? 'l-saldo' : 'l-sinal';
-      return `<button type="button" class="linha-cartao ${pendencia}" data-ir="${r.data}">${chip}
-        <span class="info"><b>${T.esc(r.nome)}</b><span>${T.esc(T.turno(r))} · ${T.esc(r.festa)}</span>
-          <span class="mini-valores">Sinal ${T.moeda(r.sinal)} · Saldo ${T.moeda(r.total - r.sinal)}</span></span>
-        <span class="item-dir"><b>${T.moeda(r.total)}</b><span class="pill ${st.cls}">${st.txt}</span></span>
+      return `<button type="button" class="linha-cartao ${pendencia}" data-ir="${r.data}">${data}
+        <b class="lc-nome">${T.esc(r.nome)}</b>
+        <span class="lc-festa">${T.esc(r.festa)} · ${r.convidados} convidados</span>
+        <span class="lc-total">${T.moeda(r.total)}</span>
+        <span class="mini-valores">Sinal ${T.moeda(r.sinal)} · Saldo ${T.moeda(r.total - r.sinal)}</span>
+        <span class="pill ${st.cls}">${st.txt}</span>
       </button>`;
     }).join('');
   }

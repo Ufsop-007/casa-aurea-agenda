@@ -194,6 +194,10 @@ legend{padding:0;margin-bottom:8px;font-size:.76rem;font-weight:600;letter-spaci
 .stepper{display:flex;align-items:stretch;gap:6px}
 .stepper button{width:46px;flex:none;border:1px solid var(--vidro-borda);border-radius:14px;background:var(--vidro-forte);cursor:pointer;font-size:1.2rem;font-weight:700;box-shadow:var(--brilho)}
 .stepper input{text-align:center;font-variant-numeric:tabular-nums}
+.hora-sel{display:flex;align-items:center;gap:4px}
+.hora-sel select{flex:1;min-width:0;min-height:46px;font-size:16px;font-weight:600;color:var(--ink);background:var(--campo);border:1px solid var(--linha);border-radius:14px;padding:8px 10px;text-align:center}
+.hora-sel select:focus{border-color:var(--ouro);outline:none;box-shadow:0 0 0 4px var(--ouro-suave)}
+.hora-sel span{font-weight:700;color:var(--muted)}
 .dinheiro{position:relative;display:block}
 .dinheiro::before{content:"R$";position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:.9rem;color:var(--muted);font-weight:600;pointer-events:none}
 .dinheiro input{padding-left:40px;font-variant-numeric:tabular-nums}
@@ -260,13 +264,20 @@ td .pill{font-size:.72rem;padding:3px 9px}
 .total-recebido small b{color:var(--conf-ink)}
 /* planilha no celular: cartões em vez de tabela */
 .sheet-lista{display:none;gap:8px;padding:12px}
-.linha-cartao{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:center;width:100%;text-align:left;cursor:pointer;
-  border:1px solid var(--vidro-borda);border-radius:18px;padding:10px 12px 10px 14px;background:var(--vidro-forte);box-shadow:var(--brilho);position:relative;overflow:hidden}
-.linha-cartao::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--pago)}
+.linha-cartao{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;min-width:0;text-align:center;cursor:pointer;
+  border:1px solid var(--vidro-borda);border-radius:18px;padding:12px 14px 14px;background:var(--vidro-forte);box-shadow:var(--brilho);position:relative;overflow:hidden}
+.linha-cartao::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--pago)}
+.linha-cartao>*{max-width:100%;overflow-wrap:anywhere}
+.lc-data{font-size:.82rem;font-weight:600;color:var(--muted);text-transform:capitalize}
+.lc-data b{font-family:var(--f-tit);font-size:1.5rem;color:var(--ink);vertical-align:-2px;margin-right:2px}
+.lc-turno{font-size:.8rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.lc-nome{font-family:var(--f-tit);font-size:1.15rem;margin-top:4px}
+.lc-festa{font-size:.86rem;color:var(--muted)}
+.lc-total{font-family:var(--f-tit);font-weight:800;font-size:1.25rem;margin-top:4px;font-variant-numeric:tabular-nums}
+.linha-cartao .pill{white-space:normal;margin-top:4px}
 .linha-cartao.l-sinal{background:var(--pend-suave)} .linha-cartao.l-sinal::before{background:var(--pend)}
 .linha-cartao.l-saldo{background:var(--conf-suave)} .linha-cartao.l-saldo::before{background:var(--conf)}
 .linha-cartao.l-fech{background:var(--fech-suave)} .linha-cartao.l-fech::before{background:var(--fech)}
-.linha-cartao .item-dir{grid-column:2;justify-items:start;grid-auto-flow:column;align-items:center;justify-content:start;gap:8px}
 .mini-valores{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .lista-vazia{padding:6px 4px}
 @media (max-width:560px){
@@ -307,6 +318,8 @@ td .pill{font-size:.72rem;padding:3px 9px}
   .tile .valor{font-size:1.3rem}
   .cabeca .mes-switch{width:100%;justify-content:space-between}
   .item{grid-template-columns:auto minmax(0,1fr)}
-  .item-dir{grid-column:2;justify-items:start;grid-auto-flow:column;align-items:center;gap:8px}
+  .item-dir{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-width:0}
+  .item-dir .pill{white-space:normal}
+  .tile .valor{font-size:1.15rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}

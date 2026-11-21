@@ -80,13 +80,24 @@
       pacote: fd.get('pacote') || Object.keys(C.PACOTES)[0],
       convidados: Math.min(2000, Math.max(1, Math.round(Number(fd.get('convidados')) || 1))),
       extras: fd.getAll('extras'),
-      total: Math.min(R.MAX_VALOR, Math.max(0, Number(fd.get('total')) || 0)),
-      sinal: Math.min(R.MAX_VALOR, Math.max(0, Number(fd.get('sinal')) || 0)),
-      inicio: String(fd.get('inicio') || ''),
-      fim: String(fd.get('fim') || ''),
+      total: Math.min(R.MAX_VALOR, Math.max(0, T.lerDinheiro(fd.get('total')))),
+      sinal: Math.min(R.MAX_VALOR, Math.max(0, T.lerDinheiro(fd.get('sinal')))),
+      inicio: juntarHora(fd, 'inicio'),
+      fim: juntarHora(fd, 'fim'),
       ...R.pagamento(fd.get('pagamento')),
       obs: String(fd.get('obs') || '').trim()
     };
+  }
+  // Hora escolhida nas duas listas. Só a hora = hora cheia; sem hora = vazio.
+  function juntarHora(fd, nome) {
+    const h = String(fd.get(nome + '_h') || '');
+    const m = String(fd.get(nome + '_m') || '');
+    return h ? `${h}:${m || '00'}` : '';
+  }
+  // Digitando 8 0 0 0 0 0 aparece 8.000,00 (os dois últimos números são os centavos)
+  function mascaraDinheiro(v) {
+    const dig = v.replace(/\D/g, '').slice(0, 10);
+    return T.dinheiro(Number(dig) / 100);
   }
   function mascaraFone(v) {
     const d = v.replace(/\D/g, '').slice(0, 11);
@@ -101,14 +112,14 @@
     sinalManual = !!ed && ed.sinal !== R.sinalPadrao(ed.total);
     const atualizar = () => {
       const v = lerFormulario(form);
-      if (!totalManual && v.periodo) $('#f-total').value = R.calcular(v.periodo, v.pacote, v.extras);
-      const total = Number($('#f-total').value) || 0;
-      if (!sinalManual) $('#f-sinal').value = R.sinalPadrao(total);
-      $('#f-saldo').textContent = T.moeda(Math.max(0, total - (Number($('#f-sinal').value) || 0)));
+      if (!totalManual && v.periodo) $('#f-total').value = T.dinheiro(R.calcular(v.periodo, v.pacote, v.extras));
+      const total = T.lerDinheiro($('#f-total').value);
+      if (!sinalManual) $('#f-sinal').value = T.dinheiro(R.sinalPadrao(total));
+      $('#f-saldo').textContent = T.moeda(Math.max(0, total - T.lerDinheiro($('#f-sinal').value)));
     };
     form.addEventListener('input', e => {
-      if (e.target.id === 'f-total') totalManual = true;
-      if (e.target.id === 'f-sinal') sinalManual = true;
+      if (e.target.id === 'f-total') { totalManual = true; e.target.value = mascaraDinheiro(e.target.value); }
+      if (e.target.id === 'f-sinal') { sinalManual = true; e.target.value = mascaraDinheiro(e.target.value); }
       if (e.target.id === 'f-fone') e.target.value = mascaraFone(e.target.value);
       atualizar();
     });

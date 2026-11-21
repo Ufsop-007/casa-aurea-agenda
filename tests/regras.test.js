@@ -24,9 +24,15 @@ test('calcular ignora extra ou pacote desconhecido sem quebrar', () => {
   assert.equal(R.calcular('tarde', 'inexistente', []), 0);
 });
 
-test('sinalPadrao é 30% arredondado', () => {
+test('sinalPadrao é 30% arredondado nos centavos', () => {
   assert.equal(R.sinalPadrao(2200), 660);
-  assert.equal(R.sinalPadrao(1001), 300);
+  assert.equal(R.sinalPadrao(1001), 300.3);
+  assert.equal(R.sinalPadrao(1000.05), 300.02);
+});
+
+test('paraCSV escreve centavos com vírgula', () => {
+  const csv = R.paraCSV([festa({ total: 2200.5, sinal: 660.15 })]);
+  assert.match(csv.split('\r\n')[1], /2200,5;660,15;1540,35;/);
 });
 
 test('dia inteiro ocupa tarde e noite', () => {

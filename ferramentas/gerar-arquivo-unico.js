@@ -24,7 +24,7 @@ trocar('<link rel="manifest" href="manifest.webmanifest">\n', '');
 trocar('<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">\n', '');
 trocar('href="icones/icone-192.png"', `href="${icone}"`);
 trocar('src="icones/icone-192.png"', `src="${icone}"`);
-trocar('<link rel="stylesheet" href="styles.css?v=1.1.2">', `<style>\n${ler('styles.css')}</style>`);
+trocar('<link rel="stylesheet" href="styles.css?v=1.1.3">', `<style>\n${ler('styles.css')}</style>`);
 
 const scripts = [...html.matchAll(/<script src="(js\/[a-z]+\.js)\?v=[\d.]+"><\/script>/g)];
 if (scripts.length !== 7) throw new Error(`Esperava 7 scripts, achei ${scripts.length}`);

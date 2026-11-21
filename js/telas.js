@@ -6,7 +6,10 @@
   const DIAS = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
   const pad = n => String(n).padStart(2, '0');
   const chave = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  const moeda = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const moeda = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Valor para os campos de digitar: "8.000,00" (sem o R$, que já aparece ao lado)
+  const dinheiro = v => (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const lerDinheiro = s => Number(String(s || '').replace(/\./g, '').replace(',', '.')) || 0;
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const maiuscula = s => s.charAt(0).toUpperCase() + s.slice(1);
   const dataLonga = d => maiuscula(`${DIAS[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]}`);
@@ -148,6 +151,22 @@
       <label class="chip"><input class="oculto" type="${tipo}" name="${nome}" value="${esc(o.v)}" ${marcado(o.v) ? 'checked' : ''} ${desligado && desligado(o.v) ? 'disabled' : ''}>
         <span>${o.html}</span></label>`).join('');
   }
+  // Hora em duas listas (hora e minutos): cabe em qualquer celular, ao contrário do relógio do Android.
+  const HORAS = Array.from({ length: 24 }, (_, i) => pad(i));
+  const MINUTOS = Array.from({ length: 12 }, (_, i) => pad(i * 5));
+  function seletorHora(nome, rotulo, valor) {
+    const [h, m] = (valor || '').split(':');
+    const mins = m && !MINUTOS.includes(m) ? [...MINUTOS, m].sort() : MINUTOS; // mantém um minuto antigo, ex.: 07
+    const ops = (lista, atual, vazio) => `<option value="">${vazio}</option>` +
+      lista.map(x => `<option value="${x}" ${x === atual ? 'selected' : ''}>${x}</option>`).join('');
+    return `<div class="campo"><span id="lbl-${nome}">${rotulo}</span>
+      <div class="hora-sel" role="group" aria-labelledby="lbl-${nome}">
+        <select name="${nome}_h" aria-label="${rotulo}: hora">${ops(HORAS, h, '--')}</select>
+        <span aria-hidden="true">:</span>
+        <select name="${nome}_m" aria-label="${rotulo}: minutos">${ops(mins, m, '--')}</select>
+      </div></div>`;
+  }
+
   const PAG_OPCOES = [
     { v: 'nada', html: 'Ainda não pagou' },
     { v: 'sinal', html: 'Pagou o sinal' },
@@ -168,8 +187,8 @@
         <div class="chips chips-4">${opcoes('periodo', 'radio', per, x => x === v.periodo, x => !permitidos.includes(x))}</div>
         <p class="hint">Se quiser, anote o horário combinado:</p>
         <div class="horas-opc">
-          <label class="campo">Começa às<input id="f-inicio" name="inicio" type="time" value="${esc(v.inicio || '')}"></label>
-          <label class="campo">Termina às<input id="f-fim" name="fim" type="time" value="${esc(v.fim || '')}"></label>
+          ${seletorHora('inicio', 'Começa às', v.inicio)}
+          ${seletorHora('fim', 'Termina às', v.fim)}
         </div>
       </fieldset>
       <div class="duas">
@@ -192,8 +211,8 @@
           <div class="chips-solta">${opcoes('extras', 'checkbox', C.EXTRAS.map(e => ({ v: e.id, html: esc(e.nome) })), x => v.extras.includes(x))}</div></fieldset>
       </div>
       <div class="duas">
-        <label class="campo">Valor total<span class="dinheiro"><input id="f-total" name="total" type="number" min="1" max="${R.MAX_VALOR}" step="10" inputmode="numeric" value="${total}"></span></label>
-        <label class="campo">Sinal (${Math.round(C.PCT_SINAL * 100)}%)<span class="dinheiro"><input id="f-sinal" name="sinal" type="number" min="0" max="${R.MAX_VALOR}" step="10" inputmode="numeric" value="${sinal}"></span></label>
+        <label class="campo">Valor total<span class="dinheiro"><input id="f-total" name="total" type="text" inputmode="numeric" autocomplete="off" value="${dinheiro(total)}"></span></label>
+        <label class="campo">Sinal (${Math.round(C.PCT_SINAL * 100)}%)<span class="dinheiro"><input id="f-sinal" name="sinal" type="text" inputmode="numeric" autocomplete="off" value="${dinheiro(sinal)}"></span></label>
       </div>
       <div class="saldo-linha"><span>Saldo a receber depois</span><b id="f-saldo">${moeda(Math.max(0, total - sinal))}</b></div>
       <fieldset><legend>Pagamento</legend>
@@ -229,5 +248,5 @@
       ${!ed && livres.length ? '<button type="button" class="btn btn-sm btn-ghost" data-acao="fechar">Fechar os horários livres (sem festa)</button>' : ''}`;
   }
 
-  raiz.Telas = { calendario, painelDia, cartao, nomeMes, dataLonga, moeda, esc, chave, pad, turno, MESES, DIAS };
+  raiz.Telas = { calendario, painelDia, cartao, nomeMes, dataLonga, moeda, dinheiro, lerDinheiro, esc, chave, pad, turno, MESES, DIAS };
 })(window);
