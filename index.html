@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#F3F6F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1917" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Casa Áurea">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Agenda Casa Áurea</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=1.1.1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">
+      <img src="icones/icone-192.png" alt="" width="30" height="30">
+      Casa Áurea
+    </div>
+    <nav class="tabs" aria-label="Telas">
+      <a href="#agenda" data-aba="agenda">Agenda</a>
+      <a href="#resumo" data-aba="resumo">Resumo</a>
+      <a href="#planilha" data-aba="planilha">Planilha</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="instalar" id="instalar" hidden>
+    <p><b>Instale no iPhone:</b> toque em <b>Compartilhar</b> (o quadrado com a seta) e depois em <b>Adicionar à Tela de Início</b>. Assim o app ganha um ícone e as festas ficam guardadas com segurança.</p>
+    <button type="button" class="btn btn-sm btn-ghost" id="fecharInstalar">Agora não</button>
+  </div>
+
+  <!-- AGENDA -->
+  <section class="view" id="v-agenda">
+    <div class="cabeca">
+      <div><p class="eyebrow">Minha agenda</p><h1>Escolha o dia e marque a festa</h1></div>
+    </div>
+    <div class="grid">
+      <section class="card" aria-labelledby="mesTitulo">
+        <div class="cal-head">
+          <button type="button" class="nav-btn" data-mes="-1" aria-label="Mês anterior">‹</button>
+          <h2 id="mesTitulo"></h2>
+          <button type="button" class="btn btn-sm" id="irHoje">Hoje</button>
+          <button type="button" class="nav-btn" data-mes="1" aria-label="Próximo mês">›</button>
+        </div>
+        <div class="semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+        <div class="cal-grid" id="cal"></div>
+        <div class="legenda">
+          <span><i class="lg-livre"></i>Livre</span>
+          <span><i class="lg-pend"></i>Esperando sinal</span>
+          <span><i class="lg-conf"></i>Confirmada</span>
+          <span><i class="lg-pago"></i>Tudo pago</span>
+          <span><i class="lg-fech"></i>Fechado</span>
+        </div>
+        <p class="hint legenda-nota">As três barrinhas de cada dia são manhã, tarde e noite. Dia todo pintado = sem horário livre.</p>
+      </section>
+      <section class="card painel" id="painel" aria-live="polite"></section>
+    </div>
+  </section>
+
+  <!-- RESUMO -->
+  <section class="view" id="v-resumo" hidden>
+    <div class="cabeca">
+      <div><p class="eyebrow">Resumo do mês</p><h1>Como está a Casa Áurea</h1></div>
+      <div class="mes-switch">
+        <button type="button" class="nav-btn" data-mes="-1" aria-label="Mês anterior">‹</button>
+        <span id="mesResumo"></span>
+        <button type="button" class="nav-btn" data-mes="1" aria-label="Próximo mês">›</button>
+      </div>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <div class="resumo-grid">
+      <section class="card" aria-labelledby="proxTit">
+        <div class="sec-titulo"><h2 id="proxTit">Próximas festas</h2><span class="badge" id="proxQtd"></span></div>
+        <div class="lista" id="prox"></div>
+      </section>
+      <section class="card" aria-labelledby="lembTit">
+        <div class="sec-titulo"><h2 id="lembTit">Lembretes</h2></div>
+        <ul class="lembretes" id="lembretes"></ul>
+      </section>
+    </div>
+  </section>
+
+  <!-- PLANILHA -->
+  <section class="view" id="v-planilha" hidden>
+    <div class="cabeca">
+      <div><p class="eyebrow">Planilha</p><h1>Todas as festas numa tabela</h1>
+        <p class="lead">Tudo que você marca na agenda aparece aqui sozinho. Quando quiser, baixe e abra no Excel.</p></div>
+      <div class="card total-recebido" id="totalPlanilha" aria-live="polite"></div>
+    </div>
+    <section class="card sheet" aria-label="Planilha de festas">
+      <div class="sheet-bar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="2" width="18" height="20" rx="3" class="sh-bg"/><path d="M7 8h10M7 12h10M7 16h10M12 8v10" class="sh-linha"/></svg>
+        <b>Festas · Casa Áurea</b>
+        <button type="button" class="btn btn-sm" id="baixar">Baixar para o Excel</button>
+      </div>
+      <div class="sheet-scroll"><table id="tabela"></table></div>
+    </section>
+  </section>
+
+  <footer class="rodape">
+    <div class="rodape-txt">
+      <b>Passar para outro aparelho</b>
+      <span>As festas ficam guardadas neste aparelho. Para levar ao PC ou ao celular, toque em <b>Exportar</b> aqui e em <b>Importar</b> no outro.</span>
+    </div>
+    <div class="acoes">
+      <button type="button" class="btn" id="exportar">Exportar cópia</button>
+      <button type="button" class="btn" id="importar">Importar cópia</button>
+      <input type="file" id="arquivo" accept=".json,application/json" hidden>
+    </div>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="js/config.js?v=1.1.1"></script>
+<script src="js/regras.js?v=1.1.1"></script>
+<script src="js/armazenamento.js?v=1.1.1"></script>
+<script src="js/arquivos.js?v=1.1.1"></script>
+<script src="js/telas.js?v=1.1.1"></script>
+<script src="js/resumo.js?v=1.1.1"></script>
+<script src="js/app.js?v=1.1.1"></script>
+</body>
+</html>
