@@ -137,9 +137,9 @@
       ${r.fone ? `<p class="muted">WhatsApp: ${esc(r.fone)}</p>` : ''}
       ${r.obs ? `<p class="muted">Obs.: ${esc(r.obs)}</p>` : ''}
       <div class="valores">
-        <div><small>Total</small><b>${moeda(r.total)}</b></div>
         <div><small>Sinal</small><b>${moeda(r.sinal)}</b>${estado(r.sinalPago)}</div>
         <div><small>Saldo</small><b>${moeda(r.total - r.sinal)}</b>${estado(r.saldoPago)}</div>
+        <div class="v-total"><small>Total</small><b>${moeda(r.total)}</b></div>
       </div>
       ${acoesFesta(r, excluirId)}
     </article>`;

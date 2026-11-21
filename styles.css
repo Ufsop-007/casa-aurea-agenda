@@ -326,6 +326,10 @@ td .pill{font-size:.72rem;padding:3px 9px}
   .valores small{flex:1}
   .valores b{font-size:1rem}
   .valores em{min-width:66px;text-align:right}
+  /* total por último, separado e em destaque */
+  .valores .v-total{border-top:1px solid var(--linha);padding-top:7px;margin-top:2px}
+  .valores .v-total small{color:var(--ink);font-weight:700}
+  .valores .v-total b{font-size:1.15rem;margin-right:74px}
   .tile .valor{font-size:1.15rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
