@@ -320,6 +320,12 @@ td .pill{font-size:.72rem;padding:3px 9px}
   .item{grid-template-columns:auto minmax(0,1fr)}
   .item-dir{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-width:0}
   .item-dir .pill{white-space:normal}
+  /* valores da festa um embaixo do outro: nome à esquerda, valor à direita */
+  .valores{grid-template-columns:1fr;gap:6px;padding:10px 12px}
+  .valores div{display:flex;align-items:baseline;gap:8px}
+  .valores small{flex:1}
+  .valores b{font-size:1rem}
+  .valores em{min-width:66px;text-align:right}
   .tile .valor{font-size:1.15rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
