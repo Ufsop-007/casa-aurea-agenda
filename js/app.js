@@ -59,6 +59,7 @@
     renderResumo();
     $('#tabela').innerHTML = S.planilha(registros);
     $('#totalPlanilha').innerHTML = S.totalRecebido(registros);
+    $('#planilhaLista').innerHTML = S.planilhaCartoes(registros);
   }
   function mostrarAba() {
     const aba = ABAS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'agenda';
@@ -226,6 +227,7 @@
   });
   $('#cal').addEventListener('click', e => { const b = e.target.closest('[data-dia]'); if (b) escolherDia(b.dataset.dia, true); });
   $('#prox').addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if (b) escolherDia(b.dataset.ir, false); });
+  $('#planilhaLista').addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if (b) escolherDia(b.dataset.ir, false); });
   document.querySelectorAll('[data-mes]').forEach(b => b.addEventListener('click', () => {
     const d = new Date(mes.y, mes.m + Number(b.dataset.mes), 1);
     mes = { y: d.getFullYear(), m: d.getMonth() };

@@ -258,7 +258,23 @@ td .pill{font-size:.72rem;padding:3px 9px}
 .total-recebido .valor{font-family:var(--f-tit);font-weight:800;font-size:1.9rem;letter-spacing:-.02em;color:var(--pago-ink);font-variant-numeric:tabular-nums;line-height:1.1}
 .total-recebido small{color:var(--muted);font-size:.84rem}
 .total-recebido small b{color:var(--conf-ink)}
-@media (max-width:560px){.total-recebido{width:100%;text-align:left}}
+/* planilha no celular: cartões em vez de tabela */
+.sheet-lista{display:none;gap:8px;padding:12px}
+.linha-cartao{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:center;width:100%;text-align:left;cursor:pointer;
+  border:1px solid var(--vidro-borda);border-radius:18px;padding:10px 12px 10px 14px;background:var(--vidro-forte);box-shadow:var(--brilho);position:relative;overflow:hidden}
+.linha-cartao::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--pago)}
+.linha-cartao.l-sinal{background:var(--pend-suave)} .linha-cartao.l-sinal::before{background:var(--pend)}
+.linha-cartao.l-saldo{background:var(--conf-suave)} .linha-cartao.l-saldo::before{background:var(--conf)}
+.linha-cartao.l-fech{background:var(--fech-suave)} .linha-cartao.l-fech::before{background:var(--fech)}
+.linha-cartao .item-dir{grid-column:2;justify-items:start;grid-auto-flow:column;align-items:center;justify-content:start;gap:8px}
+.mini-valores{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.lista-vazia{padding:6px 4px}
+@media (max-width:560px){
+  .total-recebido{width:100%;text-align:left}
+  .sheet-scroll{display:none}
+  .sheet-lista{display:grid}
+  .sheet-bar .btn{margin-left:0}
+}
 
 /* rodapé: exportar / importar */
 .rodape{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;border-top:1px solid var(--linha);padding-top:16px}

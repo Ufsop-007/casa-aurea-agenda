@@ -86,6 +86,27 @@
       <tr class="cab"><th class="n">1</th>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${corpo}${vazio}</tbody>`;
   }
 
+  // Versão da planilha para celular: um cartão por festa, em vez de uma tabela larga.
+  function planilhaCartoes(regs) {
+    const linhas = R.ordenar(R.ativos(regs));
+    if (!linhas.length) return '<p class="muted lista-vazia">Nenhuma festa ainda. O que você marcar na Agenda aparece aqui.</p>';
+    return linhas.map(r => {
+      const d = R.lerData(r.data);
+      const chip = `<span class="data-chip"><b>${d.getDate()}</b><span>${T.MESES[d.getMonth()].slice(0, 3)} · ${T.DIAS[d.getDay()].slice(0, 3)}</span></span>`;
+      if (r.kind === 'fechado') {
+        return `<button type="button" class="linha-cartao l-fech" data-ir="${r.data}">${chip}
+          <span class="info"><b>Fechado</b><span>${T.esc(T.turno(r))} · ${T.esc(r.motivo)}</span></span></button>`;
+      }
+      const st = R.situacao(r);
+      const pendencia = r.saldoPago ? 'l-ok' : r.sinalPago ? 'l-saldo' : 'l-sinal';
+      return `<button type="button" class="linha-cartao ${pendencia}" data-ir="${r.data}">${chip}
+        <span class="info"><b>${T.esc(r.nome)}</b><span>${T.esc(T.turno(r))} · ${T.esc(r.festa)}</span>
+          <span class="mini-valores">Sinal ${T.moeda(r.sinal)} · Saldo ${T.moeda(r.total - r.sinal)}</span></span>
+        <span class="item-dir"><b>${T.moeda(r.total)}</b><span class="pill ${st.cls}">${st.txt}</span></span>
+      </button>`;
+    }).join('');
+  }
+
   // Total já recebido de todas as festas (sinais + saldos pagos) e quanto ainda falta.
   function totalRecebido(regs) {
     const festas = R.ativos(regs).filter(r => r.kind === 'festa');
@@ -96,5 +117,5 @@
       <small>${falta > 0 ? `falta receber <b>${T.moeda(falta)}</b>` : 'nada pendente'}</small>`;
   }
 
-  raiz.Resumo = { tiles, futuras, proximas, lembretes, planilha, totalRecebido };
+  raiz.Resumo = { tiles, futuras, proximas, lembretes, planilha, planilhaCartoes, totalRecebido };
 })(window);
