@@ -168,6 +168,7 @@
     // Volta um passo: tudo pago -> só sinal -> nada pago
     'desfazer-pag': id => seGravou(alterar(id, r => ({ ...r, ...R.pagamento(r.saldoPago ? 'sinal' : 'nada') })), 'Pagamento desfeito.'),
     editar: id => { editId = id; excluirId = null; },
+    contrato: id => { const r = registros.find(x => x.id === id); if (r) window.Contrato.abrir(r); },
     cancelar: () => { editId = null; formAberto = false; },
     'abrir-form': () => { formAberto = true; },
     excluir: id => { excluirId = id; },
@@ -251,6 +252,7 @@
   $('#baixar').addEventListener('click', baixarPlanilha);
   $('#fecharInstalar').addEventListener('click', () => { $('#instalar').hidden = true; });
   window.addEventListener('hashchange', () => { mostrarAba(); window.scrollTo(0, 0); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#contrato').hidden) window.Contrato.fechar(); });
   // Outra janela do app salvou: recarrega a lista para uma não apagar o que a outra fez.
   window.addEventListener('storage', e => {
     if (e.key !== A.CHAVE) return;

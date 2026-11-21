@@ -36,7 +36,15 @@
 
     TIPOS: ['Aniversário infantil', '15 anos', 'Casamento', 'Batizado', 'Chá de bebê', 'Empresa', 'Outro'],
 
-    CONVIDADOS_PADRAO: 50
+    CONVIDADOS_PADRAO: 50,
+
+    // Dados da Casa Áurea que aparecem no contrato. Preencha com os dados reais.
+    EMPRESA: {
+      nome: 'Casa Áurea',
+      documento: 'CNPJ/CPF: ____________________',
+      endereco: 'Endereço: ____________________________________',
+      cidade: '______________'   // cidade do foro e da assinatura
+    }
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = CONFIG;

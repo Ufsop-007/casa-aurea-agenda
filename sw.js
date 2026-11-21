@@ -1,11 +1,11 @@
 // Deixa o app abrir sem internet: guarda os arquivos do app no aparelho.
 // As festas não passam por aqui (ficam no armazenamento do navegador).
 // Ao publicar uma versão nova, aumente VERSAO para o celular baixar os arquivos novos.
-const VERSAO = 'casa-aurea-v1.1.5';
+const VERSAO = 'casa-aurea-v1.2.0';
 const ARQUIVOS = [
-  './', './index.html', './styles.css?v=1.1.5', './manifest.webmanifest',
-  './js/config.js?v=1.1.5', './js/regras.js?v=1.1.5', './js/armazenamento.js?v=1.1.5', './js/arquivos.js?v=1.1.5',
-  './js/telas.js?v=1.1.5', './js/resumo.js?v=1.1.5', './js/app.js?v=1.1.5',
+  './', './index.html', './styles.css?v=1.2.0', './manifest.webmanifest',
+  './js/config.js?v=1.2.0', './js/regras.js?v=1.2.0', './js/armazenamento.js?v=1.2.0', './js/arquivos.js?v=1.2.0',
+  './js/telas.js?v=1.2.0', './js/resumo.js?v=1.2.0', './js/contrato.js?v=1.2.0', './js/app.js?v=1.2.0',
   './icones/icone-192.png', './icones/icone-512.png', './icones/apple-touch-icon.png'
 ];
 

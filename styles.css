@@ -293,6 +293,40 @@ td .pill{font-size:.72rem;padding:3px 9px}
 .rodape-txt b{color:var(--ink)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--vidro-forte);color:var(--ink);border:1px solid var(--vidro-borda);padding:12px 20px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:var(--sombra);max-width:calc(100% - 32px);text-align:center}
 
+/* contrato: janela por cima do app, com uma folha branca como papel */
+.contrato{position:fixed;inset:0;z-index:80;overflow:auto;background:rgba(10,15,14,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+body.com-contrato{overflow:hidden}
+.ct-barra{max-width:800px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  background:var(--vidro-forte);border:1px solid var(--vidro-borda);border-radius:20px;padding:12px 14px;box-shadow:var(--sombra)}
+.ct-barra p{flex:1 1 240px}
+.ct-folha{max-width:800px;margin:0 auto;background:#fff;color:#1c1c1e;border-radius:12px;padding:clamp(20px,5vw,56px);
+  font-family:Georgia,"Times New Roman",serif;font-size:15px;line-height:1.6;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.ct-folha h1{font-family:Georgia,"Times New Roman",serif;font-size:1.25rem;text-align:center;text-transform:uppercase;letter-spacing:.04em;margin-bottom:18px;color:#1c1c1e}
+.ct-folha h2{font-family:Georgia,"Times New Roman",serif;font-size:1rem;margin:16px 0 4px;color:#1c1c1e}
+.ct-folha p,.ct-folha li{text-align:justify;overflow-wrap:anywhere}
+.ct-folha ul{margin:4px 0;padding-left:22px}
+.ct-campo{display:inline-flex;align-items:baseline;gap:4px;max-width:100%}
+.ct-rot{white-space:nowrap}
+.ct-campo input{font:inherit;color:#1c1c1e;background:#FFF6DC;border:0;border-bottom:1.5px solid #C08A1E;border-radius:4px 4px 0 0;padding:1px 6px;min-width:0;width:100%}
+.ct-imp{display:none}
+.ct-local{margin-top:24px;text-align:right}
+.ct-assinaturas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-top:56px;text-align:center}
+.ct-assinaturas span{display:block;border-top:1px solid #1c1c1e;margin-bottom:6px}
+.ct-assinaturas small{display:block;color:#555}
+@media (max-width:560px){.ct-assinaturas{grid-template-columns:1fr;gap:44px}.ct-folha{font-size:14px}.ct-folha p,.ct-folha li{text-align:left}}
+
+/* impressão: sai só a folha do contrato */
+@media print{
+  body.com-contrato{background:#fff!important;overflow:visible}
+  body.com-contrato > *:not(#contrato){display:none!important}
+  body.com-contrato .contrato{position:static;background:none;padding:0;overflow:visible;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .nao-imprimir{display:none!important}
+  .ct-folha{box-shadow:none;border-radius:0;padding:0;max-width:none}
+  .ct-campo input{display:none}
+  .ct-imp{display:inline;border-bottom:1px solid #1c1c1e;min-width:140px;padding:0 4px}
+}
+
 /* navegadores sem desfoque: vidro mais opaco para manter a leitura */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .card,.topbar,.toast{background:var(--vidro-forte)}
